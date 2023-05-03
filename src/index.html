@@ -8,15 +8,17 @@
     <script type="module" src="./index.js"></script>
   </head>
   <body>
-  <form class="search-form" id="search-form">
-  <input
-    type="text"
-    name="searchQuery"
-    autocomplete="off"
-    placeholder="Search images..."
-  />
-  <button type="submit">Search</button>
-</form>
-   </form>
+    <form class="search-form header" id="search-form">
+      <input
+        class="search-form__input"
+        type="text"
+        name="searchQuery"
+        autocomplete="off"
+        placeholder="Search images..."
+      />
+      <button type="submit">Search</button>
+    </form>
+    <div class="js-gallery gallery"></div>
+    <div class="js-guard"></div>
   </body>
 </html>
