@@ -37,7 +37,7 @@ const { searchQuery } = evt.currentTarget.elements;
 fetchPictures(onSearch,currentPage)
     .then(data => {
       console.dir(2);
-    // galerryEl.innerHTML = ''
+    galerryEl.innerHTML = ''
       if (onSearch === '') {
         return ;
       }
