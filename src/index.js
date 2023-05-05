@@ -12,38 +12,57 @@ const guard = document.querySelector('.js-guard');
   captionsData: 'alt',
   captionPosition: 'bottom',
   captionDelay: 250,
+  });
+let currentPage = 1;
+let onSearch = '';
+
+   const observer = new IntersectionObserver(onPagination, {
+    root: null,
+    rootMargin: '300px',
+    threshold: 0,
+   });
+    
+    function onPagination(entries,observer) {
+   entries.forEach(entry => {
+    if (entry.isIntersecting === true & onSearch !== '' ) {
+      currentPage += 1;
+   fetchPictures(onSearch,currentPage)
+        .then(data => {
+          if (data.totalHits > 0) {
+            galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
+            galerrySimpleLightbox.refresh();
+          } 
+
 });
+    }
+    });
+ };   
 
 formEL.addEventListener('submit', onFormSubmit);
 
 function onFormSubmit(evt) {
  evt.preventDefault();
  galerryEl.innerHTML = '';
- let currentPage = 1;
+ currentPage = 1;
  const { searchQuery } = evt.currentTarget.elements;
- const onSearch = searchQuery.value.trim();
+ onSearch = searchQuery.value.trim();
   if (!onSearch) {
     Notiflix.Notify.info(
           'Please enter your search query.'
     );
     return;
  };
-   const observer = new IntersectionObserver(onPagination, {
-    root: null,
-    rootMargin: '300px',
-    threshold: 0,
-    });
-observer.unobserve(guard);
+  
+
 fetchPictures(onSearch,currentPage)
     .then(data => {
-      console.dir(2);
-    galerryEl.innerHTML = ''
- observer.unobserve(guard);
+      galerryEl.innerHTML = '';
+
 if (data.totalHits === 0) {
         Notiflix.Notify.info(
           'Sorry, there are no images matching your search query. Please try again.'
   );
-  observer.unobserve(guard);
+
         return;
       };
 
@@ -61,25 +80,9 @@ if (data.totalHits === 0) {
       console.log(error);
       Notiflix.Notify.failure('Oops, there is error');
     });
+ 
   
-  
-  function onPagination(entries,observer) {
-  console.log(3);
-   entries.forEach(entry => {
-     console.dir(entries);
-     console.log(onSearch);
-    if (entry.isIntersecting === true) {
-      currentPage += 1;
-      fetchPictures(onSearch,currentPage)
-        .then(data => {
-          if (data.totalHits > 0) {
-            galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
-            galerrySimpleLightbox.refresh();
-          } 
-});
-    }
-    });
- };   
+
 };
     
        
