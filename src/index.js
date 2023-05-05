@@ -26,7 +26,7 @@ function onSearchHandler(evt) {
  let currentPage = 1;
 const { searchQuery } = evt.currentTarget.elements;
   const onSearch = searchQuery.value;
-  console.dir(1);
+  console.dir(onSearch);
    const observer = new IntersectionObserver(onPagination, {
     root: null,
     rootMargin: '300px',
@@ -37,19 +37,19 @@ const { searchQuery } = evt.currentTarget.elements;
 fetchPictures(onSearch,currentPage)
     .then(data => {
       console.dir(2);
-   // galerryEl.innerHTML = ''
+    // galerryEl.innerHTML = ''
       if (onSearch === '') {
         return ;
       }
 
-      if (data.hits === 0) {
+      if (data.totalHits === 0) {
         Notiflix.Notify.info(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         return;
       }
 
-      if (data.hits > 0) {
+      if (data.totalHits > 0) {
         galerryEl.insertAdjacentHTML('beforeend', MarkupPictureList(data.hits));
          Notiflix.Notify.info(
           `"Hooray! We found ${data.totalHits} images."`
@@ -66,7 +66,7 @@ fetchPictures(onSearch,currentPage)
   
   
   
- function onPagination(entries) {
+ function onPagination(entries,observer) {
   console.log(3);
    entries.forEach(entry => {
      console.dir(entries);
