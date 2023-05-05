@@ -23,13 +23,16 @@ let onSearch = '';
    });
   
        function onPagination(entries,observer) {
-   entries.forEach(entry => {
+         entries.forEach(entry => {
+     
     if (entry.isIntersecting === true) {
       currentPage += 1;
-   fetchPictures(onSearch,currentPage)
-     .then(data => {
-           if (data.totalHits < 40) {
-        galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
+      fetchPictures(onSearch, currentPage)
+     
+        .then(data => {
+          if (data.hits.length < 40) {
+             observer.unobserve(guard);
+            galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
              galerrySimpleLightbox.refresh();
                Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         return;
