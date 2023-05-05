@@ -27,7 +27,13 @@ let onSearch = '';
     if (entry.isIntersecting === true) {
       currentPage += 1;
    fetchPictures(onSearch,currentPage)
-        .then(data => {
+     .then(data => {
+           if (data.totalHits < 40) {
+        galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
+             galerrySimpleLightbox.refresh();
+               Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        return;
+      };
             galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
             galerrySimpleLightbox.refresh();
           
@@ -67,9 +73,7 @@ if (data.totalHits === 0) {
       };
  if (data.totalHits < 40) {
         galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
-         Notiflix.Notify.info(
-          `"Hooray! We found ${data.totalHits} images."`
-        );
+        Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
         galerrySimpleLightbox.refresh();
         return;
       };
