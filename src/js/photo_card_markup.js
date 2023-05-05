@@ -1,4 +1,4 @@
- function MarkupPictureList(arr) {
+ function markupPictureList(arr) {
           
  return arr.map(({webformatURL, largeImageURL,
                 tags,
@@ -31,4 +31,4 @@
          .join("");
 }
         
-export { MarkupPictureList }
+export { markupPictureList }

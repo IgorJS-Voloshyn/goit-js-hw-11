@@ -1,11 +1,11 @@
 import Notiflix from 'notiflix';
-import { MarkupPictureList } from './js/photo_card_markup';
+import { markupPictureList } from './js/photo_card_markup';
 import fetchPictures from './js/fetch_api';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
 
-const inputEL = document.querySelector('#search-form');
+const formEL = document.querySelector('#search-form');
 const galerryEl = document.querySelector('.js-gallery');
 const guard = document.querySelector('.js-guard');
 
@@ -17,16 +17,21 @@ const galerrySimpleLightbox = new SimpleLightbox('.gallery a', {
 });
 
 
-inputEL.addEventListener('submit', onSearchHandler);
+formEL.addEventListener('submit', onFormSubmit);
 
 
-function onSearchHandler(evt) {
-   evt.preventDefault();
+function onFormSubmit(evt) {
+ evt.preventDefault();
  galerryEl.innerHTML = '';
  let currentPage = 1;
 const { searchQuery } = evt.currentTarget.elements;
-  const onSearch = searchQuery.value;
-  console.dir(onSearch);
+  const onSearch = searchQuery.value.trim();
+  if (!onSearch) {
+    Notiflix.Notify.info(
+          'Please enter your search query.'
+    );
+    return;
+ }
    const observer = new IntersectionObserver(onPagination, {
     root: null,
     rootMargin: '300px',
@@ -38,26 +43,24 @@ fetchPictures(onSearch,currentPage)
     .then(data => {
       console.dir(2);
     galerryEl.innerHTML = ''
-      if (onSearch === '') {
-        return ;
-      }
+
 
       if (data.totalHits === 0) {
         Notiflix.Notify.info(
           'Sorry, there are no images matching your search query. Please try again.'
         );
         return;
-      }
+      };
 
       if (data.totalHits > 0) {
-        galerryEl.insertAdjacentHTML('beforeend', MarkupPictureList(data.hits));
+        galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
          Notiflix.Notify.info(
           `"Hooray! We found ${data.totalHits} images."`
         );
         observer.observe(guard);
         galerrySimpleLightbox.refresh();
         return;
-      }
+      };
     })
     .catch(error => {
       console.log(error);
@@ -65,18 +68,17 @@ fetchPictures(onSearch,currentPage)
     });
   
   
-  
- function onPagination(entries,observer) {
+  function onPagination(entries,observer) {
   console.log(3);
    entries.forEach(entry => {
      console.dir(entries);
-     
-    if (entry.isIntersecting === true) {
+     console.log(onSearch);
+    if (entry.isIntersecting === true & onSearch !== null) {
       currentPage += 1;
       fetchPictures(onSearch,currentPage)
         .then(data => {
-          if (data.total > 0) {
-            galerryEl.insertAdjacentHTML('beforeend', MarkupPictureList(data.hits));
+          if (data.totalHits > 40) {
+            galerryEl.insertAdjacentHTML('beforeend', markupPictureList(data.hits));
             galerrySimpleLightbox.refresh();
           }
 });
