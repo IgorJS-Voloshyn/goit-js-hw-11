@@ -9,7 +9,7 @@
               }) =>
    `<div class="photo-card">
       <a class="gallery-item" href="${largeImageURL}">
-        <img src="${webformatURL}" alt="${tags}" loading="lazy"/>
+        <img class='gallery-image' src="${webformatURL}" alt="${tags}" loading="lazy"/>
       </a>
       <div class="info">
         <p class="info-item">
